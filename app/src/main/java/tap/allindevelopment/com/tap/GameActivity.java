@@ -1,20 +1,16 @@
 package tap.allindevelopment.com.tap;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar;
 
@@ -32,6 +28,8 @@ public class GameActivity extends Activity {
     TextView totalpoints;
     Typeface fontPoints;
     Integer   globalPoints;
+    CountDownTimer lol;
+    int check_final = 0;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -48,10 +46,11 @@ public class GameActivity extends Activity {
             final ImageView image2 = (ImageView) findViewById(R.id.imageView2);
             final ImageView image3 = (ImageView) findViewById(R.id.imageView3);
             final ImageView image4 = (ImageView) findViewById(R.id.imageView4);
-            final ImageView again = (ImageView) findViewById(R.id.replay);
             TextView score = (TextView) findViewById(R.id.points);
             RoundCornerProgressBar barProg = (RoundCornerProgressBar) findViewById(R.id.progress_1);
-
+            barProg.setProgress(0);
+            if (check_final == 1)
+                lol.onFinish();
             barProg.setVisibility(View.INVISIBLE);
             image.setVisibility(View.INVISIBLE);
             image2.setVisibility(View.INVISIBLE);
@@ -60,22 +59,6 @@ public class GameActivity extends Activity {
             moveLogo(tapLogo);
             moveScore(score);
             score.setTextSize(40);
-            again.setVisibility(View.VISIBLE);
-
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    // Actions to do after 10 seconds
-                }
-            }, 400);;
-            again.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    moveLogo2(tapLogo);
-                    moveScore2(again);
-                    displayMap(0);
-                }
-            });
         }
 
         private void moveLogo( View view )
@@ -88,7 +71,9 @@ public class GameActivity extends Activity {
 
     private void moveLogo2( View view )
     {
-        TranslateAnimation anim = new TranslateAnimation( 0, 0, 0, 600);
+        Display display = getWindowManager().getDefaultDisplay();
+        double height = (display.getHeight()) * -1;
+        TranslateAnimation anim = new TranslateAnimation( 0, 0, 0, (float)height);
         anim.setDuration(700);
         anim.setFillAfter(true);
         view.startAnimation(anim);
@@ -109,6 +94,31 @@ public class GameActivity extends Activity {
         anim.setDuration(700);
         anim.setFillAfter( true );
         view.startAnimation(anim);
+    }
+
+    private void setMyCube(ImageView img, Integer not)
+    {
+        if (img.getImageAlpha() == 255) {
+            img.setImageAlpha(0);
+            Random r = new Random();
+            globalPoints += 1;
+            totalpoints.setText("Score: " + Integer.toString(globalPoints));
+            int i = r.nextInt(4);
+            while (i == not - 1)
+                i = r.nextInt(4);
+            if (i == 0) {
+                image.setImageAlpha(255);
+            } else if (i == 1) {
+                image2.setImageAlpha(255);
+            } else if (i == 2) {
+                image3.setImageAlpha(255);
+            } else if (i == 3) {
+                image4.setImageAlpha(255);
+            }
+        } else {
+            check_final = 1;
+            EndGame();
+        }
     }
 
     public void displayMap(int pos)
@@ -156,98 +166,60 @@ public class GameActivity extends Activity {
                         image4.setImageAlpha(255);
                     }
 
-                    image.setOnClickListener(new View.OnClickListener() {
+                    image.setOnTouchListener(new View.OnTouchListener() {
                         @Override
-                        public void onClick(View v) {
-                            if (image.getImageAlpha() == 255) {
-                                image.setImageAlpha(0);
-                                Random r = new Random();
-                                globalPoints += 1;
-                                totalpoints.setText("Score: " + Integer.toString(globalPoints));
-                                int i = r.nextInt(3);
-                                if (i == 0) {
-                                    image2.setImageAlpha(255);
-                                } else if (i == 1) {
-                                    image3.setImageAlpha(255);
-                                } else if (i == 2) {
-                                    image4.setImageAlpha(255);
-                                }
-                            } else {
-                                EndGame();
+                        public boolean onTouch(View v, MotionEvent event) {
+                            switch (event.getAction()) {
+                                case MotionEvent.ACTION_DOWN:
+                                    setMyCube(image, 1);
+                                    return true;
                             }
+                            return false;
                         }
                     });
 
-                    image2.setOnClickListener(new View.OnClickListener() {
+                    image2.setOnTouchListener(new View.OnTouchListener() {
                         @Override
-                        public void onClick(View v) {
-                            if (image2.getImageAlpha() == 255) {
-                                image2.setImageAlpha(0);
-                                Random r = new Random();
-                                globalPoints += 1;
-                                totalpoints.setText("Score: " + Integer.toString(globalPoints));
-                                int i = r.nextInt(3);
-                                if (i == 0) {
-                                    image.setImageAlpha(255);
-                                } else if (i == 1) {
-                                    image3.setImageAlpha(255);
-                                } else if (i == 2) {
-                                    image4.setImageAlpha(255);
-                                }
-                            } else {
-                                EndGame();
+                        public boolean onTouch(View v, MotionEvent event) {
+                            switch (event.getAction()) {
+                                case MotionEvent.ACTION_DOWN:
+                                    setMyCube(image2, 2);
+                                    return true;
                             }
+                            return false;
                         }
                     });
 
-                    image3.setOnClickListener(new View.OnClickListener() {
+                    image3.setOnTouchListener(new View.OnTouchListener() {
                         @Override
-                        public void onClick(View v) {
-                            if (image3.getImageAlpha() == 255) {
-                                image3.setImageAlpha(0);
-                                Random r = new Random();
-                                globalPoints += 1;
-                                totalpoints.setText("Score: " + Integer.toString(globalPoints));
-                                int i = r.nextInt(3);
-                                if (i == 0) {
-                                    image.setImageAlpha(255);
-                                } else if (i == 1) {
-                                    image2.setImageAlpha(255);
-                                } else if (i == 2) {
-                                    image4.setImageAlpha(255);
-                                }
-                            } else {
-                                EndGame();
+                        public boolean onTouch(View v, MotionEvent event) {
+                            switch (event.getAction()) {
+                                case MotionEvent.ACTION_DOWN:
+                                    setMyCube(image3, 3);
+                                    return true;
                             }
+                            return false;
                         }
                     });
-                    image4.setOnClickListener(new View.OnClickListener() {
+
+                    image4.setOnTouchListener(new View.OnTouchListener() {
                         @Override
-                        public void onClick(View v) {
-                            if (image4.getImageAlpha() == 255) {
-                                image4.setImageAlpha(0);
-                                Random r = new Random();
-                                globalPoints += 1;
-                                totalpoints.setText("Score: " + Integer.toString(globalPoints));
-                                int i = r.nextInt(3);
-                                if (i == 0) {
-                                    image.setImageAlpha(255);
-                                } else if (i == 1) {
-                                    image2.setImageAlpha(255);
-                                } else if (i == 2) {
-                                    image3.setImageAlpha(255);
-                                }
-                            } else {
-                                EndGame();
+                        public boolean onTouch(View v, MotionEvent event) {
+                            switch (event.getAction()) {
+                                case MotionEvent.ACTION_DOWN:
+                                    setMyCube(image4, 4);
+                                    return true;
                             }
+                            return false;
                         }
                     });
+
+
                     int test = 100;
-                    new CountDownTimer(20000, 100) {
+                    lol = new CountDownTimer(20000, 100) {
 
                         public void onTick(long millisUntilFinished) {
                             RoundCornerProgressBar progress2 = (RoundCornerProgressBar) findViewById(R.id.progress_1);
-                            progress2.setVisibility(View.VISIBLE);
                             double progress1 = (millisUntilFinished  / 1000.000) *  5.000;
                             progress2.setProgress((float)progress1);
                         }
@@ -255,7 +227,8 @@ public class GameActivity extends Activity {
                         public void onFinish() {
                             RoundCornerProgressBar progress2 = (RoundCornerProgressBar) findViewById(R.id.progress_1);
                             progress2.setProgress(0);
-                            EndGame();
+                            if (check_final == 0)
+                                EndGame();
                             Log.i("temps :", "done!");
                         }
                     }.start();

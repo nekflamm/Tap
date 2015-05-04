@@ -3,17 +3,16 @@ package tap.allindevelopment.com.tap;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Random;
 
@@ -74,7 +73,7 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
 
-    private void moveAnim( View view )
+    private void moveAnim(View view)
     {
         TranslateAnimation anim = new TranslateAnimation( 0, 0, 0, 700);
         anim.setDuration(700);
@@ -82,9 +81,11 @@ public class MainActivity extends Activity {
         view.startAnimation(anim);
     }
 
-    private void moveAnimLogo( View view )
+    private void moveAnimLogo(View view)
     {
-        TranslateAnimation anim = new TranslateAnimation( 0, 0, 0, 550);
+        Display display = getWindowManager().getDefaultDisplay();
+        double height = display.getHeight()/2.1000;
+        TranslateAnimation anim = new TranslateAnimation( 0, 0, 0, (float)height);
         anim.setDuration(1000);
         anim.setFillAfter( true );
         view.startAnimation(anim);
