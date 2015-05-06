@@ -75,7 +75,9 @@ public class MainActivity extends Activity {
 
     private void moveAnim(View view)
     {
-        TranslateAnimation anim = new TranslateAnimation( 0, 0, 0, 700);
+        Display display = getWindowManager().getDefaultDisplay();
+        double height = display.getHeight()/2.1000;
+        TranslateAnimation anim = new TranslateAnimation( 0, 0, 0, (float)height);
         anim.setDuration(700);
         anim.setFillAfter( true );
         view.startAnimation(anim);
