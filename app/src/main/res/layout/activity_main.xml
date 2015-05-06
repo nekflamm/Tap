@@ -20,16 +20,15 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:id="@+id/play_btn"
-        android:layout_marginTop="101dp"
         android:src="@drawable/play_button"
-        android:layout_below="@+id/logo"
+        android:layout_alignTop="@+id/test33"
         android:layout_alignLeft="@+id/logo"
         android:layout_alignStart="@+id/logo"
-        android:layout_marginLeft="-20dp" />
+        android:layout_marginRight="5dp" />
 
     <ImageView
-        android:layout_width="102dp"
-        android:layout_height="102dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:id="@+id/test33"
         android:src="@drawable/grade_bt"
         android:layout_toEndOf="@+id/play_btn"
@@ -37,7 +36,8 @@
         android:layout_below="@+id/logo"
         android:layout_alignRight="@+id/logo"
         android:layout_alignEnd="@+id/logo"
-        android:layout_marginRight="-20dp" />
+        android:layout_marginRight="-20dp"
+        android:layout_toRightOf="@+id/play_btn" />
 
 
     <ImageView
